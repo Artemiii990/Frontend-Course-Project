@@ -1,0 +1,55 @@
+.admin-container {
+    padding: 20px;
+}
+
+.admin-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.admin-form input {
+    padding: 8px;
+}
+
+.admin-form button {
+    background: green;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.not-admin {
+    color: red;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.admin-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.admin-tabs button{
+    padding:10px 20px;
+    border:none;
+    background:#ddd;
+    cursor:pointer;
+}
+
+.admin-tabs .active{
+    background:#4CAF50;
+    color:white;
+}

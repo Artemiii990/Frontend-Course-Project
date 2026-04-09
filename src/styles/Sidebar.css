@@ -1,0 +1,21 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #cccccc;
+    padding: 40px;
+}
+
+.sidebar ul{
+    text-decoration: none;
+}
+
+.li-list{
+    height: 30px;
+    list-style: none;
+    font-size: 20px;
+}
+
+.li-list:hover{
+    background-color: #19fd01;
+    border-radius: 10px;
+}
