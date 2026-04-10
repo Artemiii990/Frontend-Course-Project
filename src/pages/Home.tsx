@@ -5,26 +5,24 @@ import { getProducts } from "../Services/productsApi"
 import ProductsForYou from "../components/ProductsForYou"
 import type {Product} from "../Type/TypeProduct.ts";
 
-
 type Props = {
     token: string | null
 }
 
-export default function Home({ token }: Props) {
+export default  function Home({ token }: Props) {
     const [products, setProducts] = useState<Product[]>([])
 
     useEffect(() => {
-        loadProducts()
+        (async () => {
+            try {
+                const data = await getProducts()
+                setProducts(data)
+            } catch (error) {
+                console.error(error)
+            }
+        })()
     }, [])
 
-    const loadProducts = async () => {
-        try {
-            const data = await getProducts()
-            setProducts(data)
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     return (
         <div className="layout">

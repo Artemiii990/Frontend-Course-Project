@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Header.css";
-import UserIcon from "../icons/user.png";
+import UserIcon from "../icons/user.svg";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import searchIcon from "../icons/search.png";
-import KosikIcon from "../icons/basket.svg"
+import KosicIcon from "../icons/basket.svg"
 
 export default function Header() {
 
@@ -86,7 +86,7 @@ export default function Header() {
                     <>
                         <Link to="/kosik">
                             <button >
-                                <img src={KosikIcon} alt="Увійти"/>
+                                <img src={KosicIcon} alt="Увійти"/>
                             </button>
                         </Link>
 

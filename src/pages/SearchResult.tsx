@@ -9,7 +9,6 @@ export default function SearchResults() {
     const location = useLocation();
     const query = new URLSearchParams(location.search).get("query") || "";
 
-    // фильтры
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
 
@@ -29,10 +28,10 @@ export default function SearchResults() {
 
         if (query) fetchProducts();
     }, [query]);
-    
+
     const filteredProducts = products.filter((p) => {
         const price = p.price;
-        const name = p.title.toLowerCase();
+        const name = p.name.toLowerCase();
         const querySearch = search.toLowerCase();
 
         if (querySearch && !name.includes(querySearch)) return false;
@@ -43,7 +42,6 @@ export default function SearchResults() {
         return true;
     });
 
-    // сортировка
     const sortedProducts = [...filteredProducts].sort((a, b) => {
         if (sortType === "price_asc") return a.price - b.price;
         if (sortType === "price_desc") return b.price - a.price;
@@ -66,9 +64,9 @@ export default function SearchResults() {
                         {sortedProducts.map((p) => (
                             <div className="product-card-result" key={p.id}>
 
-                                <img src={p.imageUrl} alt={p.title} />
+                                <img src={p.imageUrl} alt={p.name} />
 
-                                <h3>{p.title}</h3>
+                                <h3>{p.name}</h3>
 
                                 <p className="price">{p.price} грн</p>
 
