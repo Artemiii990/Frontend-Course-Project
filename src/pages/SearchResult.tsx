@@ -5,33 +5,50 @@ import type { Product } from "../Type/TypeProduct.ts";
 
 export default function SearchResults() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(false);
 
     const location = useLocation();
-    const query = new URLSearchParams(location.search).get("query") || "";
+
+    const query = new URLSearchParams(location.search).get("query") ?? "";
 
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
-
     const [search, setSearch] = useState("");
-
     const [sortType, setSortType] = useState("default");
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            const res = await fetch(
-                `https://localhost:44372/api/FindProduct?search=${encodeURIComponent(query)}`
-            );
+        if (!query) return;
 
-            const data = await res.json();
-            setProducts(data);
+        const fetchProducts = async () => {
+            setLoading(true);
+
+            try {
+                const res = await fetch(
+                    `https://localhost:44372/api/FindProduct?search=${encodeURIComponent(query)}`
+                );
+
+                if (!res.ok) throw new Error("API error");
+
+                const data = await res.json();
+
+                setProducts(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error("Fetch error:", err);
+                setProducts([]);
+            } finally {
+                setLoading(false);
+            }
         };
 
-        if (query) fetchProducts();
+        fetchProducts();
     }, [query]);
 
-    const filteredProducts = products.filter((p) => {
-        const price = p.price;
-        const name = p.name.toLowerCase();
+    // защита от мусора
+    const safeProducts = Array.isArray(products) ? products : [];
+
+    const filteredProducts = safeProducts.filter((p) => {
+        const name = (p.name ?? "").toLowerCase();
+        const price = Number(p.price ?? 0);
         const querySearch = search.toLowerCase();
 
         if (querySearch && !name.includes(querySearch)) return false;
@@ -43,31 +60,30 @@ export default function SearchResults() {
     });
 
     const sortedProducts = [...filteredProducts].sort((a, b) => {
-        if (sortType === "price_asc") return a.price - b.price;
-        if (sortType === "price_desc") return b.price - a.price;
+        const priceA = Number(a.price ?? 0);
+        const priceB = Number(b.price ?? 0);
+
+        if (sortType === "price_asc") return priceA - priceB;
+        if (sortType === "price_desc") return priceB - priceA;
         return 0;
     });
 
     return (
         <div className="search-page">
 
-            {/* товары */}
             <div className="products-section">
-
                 <h2>Результати пошуку: "{query}"</h2>
 
-                {sortedProducts.length === 0 ? (
+                {loading ? (
+                    <p>Завантаження...</p>
+                ) : sortedProducts.length === 0 ? (
                     <p className="no-results">Нічого не знайдено</p>
                 ) : (
                     <div className="products-grid">
-
                         {sortedProducts.map((p) => (
                             <div className="product-card-result" key={p.id}>
-
-                                <img src={p.imageUrl} alt={p.name} />
-
+                                <img src={p.imageUrl} alt={p.name ?? "product"} />
                                 <h3>{p.name}</h3>
-
                                 <p className="price">{p.price} грн</p>
 
                                 <Link to="/approved">
@@ -75,21 +91,16 @@ export default function SearchResults() {
                                         Купити
                                     </button>
                                 </Link>
-
                             </div>
                         ))}
-
                     </div>
                 )}
-
             </div>
 
-            {/* панель фильтров */}
             <div className="filter-panel">
 
                 <h3>Фильтры</h3>
 
-                {/* поиск */}
                 <div className="filter-block">
                     <label>Пошук за назвою</label>
                     <input
@@ -99,9 +110,7 @@ export default function SearchResults() {
                     />
                 </div>
 
-                {/* цена */}
                 <div className="filter-block">
-
                     <label>Ціна</label>
 
                     <input
@@ -117,25 +126,19 @@ export default function SearchResults() {
                         value={maxPrice}
                         onChange={(e) => setMaxPrice(e.target.value)}
                     />
-
                 </div>
 
-                {/* сортировка */}
                 <div className="filter-block">
-
                     <label>Сортування</label>
 
                     <select
                         value={sortType}
                         onChange={(e) => setSortType(e.target.value)}
                     >
-
                         <option value="default">Без сортування</option>
                         <option value="price_asc">Спочатку дешевші</option>
                         <option value="price_desc">Спочатку дорожчі</option>
-
                     </select>
-
                 </div>
 
             </div>
