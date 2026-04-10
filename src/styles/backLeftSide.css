@@ -13,7 +13,7 @@
     top: 0;
     width: 300px;
     height: 100vh;
-    background: white;
+    background: #040202;
     box-shadow: 3px 0 10px rgba(0,0,0,0.15);
     transition: left 0.3s ease;
     z-index: 100;
@@ -39,10 +39,12 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    color:white;
 }
 
 /* элементы меню */
 .LeftSidebar li {
+    color:white;
     padding: 12px 10px;
     border-radius: 6px;
     transition: 0.2s;

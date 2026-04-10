@@ -53,3 +53,30 @@
     background:#4CAF50;
     color:white;
 }
+
+@media (max-width: 1024px) {
+    .admin-container {
+        padding: 10px;
+    }
+
+    .admin-table {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-tabs {
+        flex-direction: column;
+    }
+
+    .admin-form input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-table {
+        overflow-x: auto;
+        display: block;
+    }
+}

@@ -1,36 +1,74 @@
 import "../styles/Products-section.css";
-import { useNavigate } from "react-router-dom";
+import type { Props } from "../Type/TypeProps.ts";
 
-type Props = {
-    title: string;
+type CartItem = {
+    id: number;
+    name: string;
     price: number;
     imageUrl: string;
-    token: string | null;
+    quantity: number;
 };
 
-export default function ProductCard({ title, price, imageUrl, token }: Props) {
-    const navigate = useNavigate();
+export default function ProductCard({
+                                        id,
+                                        title,
+                                        price,
+                                        imageUrl,
+                                        token
+                                    }: Props) {
 
-    const goToBuyPage = () => {
-        if (!token) return;
+    const addToCart = () => {
 
-        navigate("/buyproduct", {
-            state: { title, price, imageUrl }
-        });
+        if (!token) {
+            alert("Увійдіть у систему");
+            return;
+        }
+
+        const cart: CartItem[] = JSON.parse(
+            localStorage.getItem("cart") || "[]"
+        );
+
+        const existing = cart.find(item => item.id === id);
+
+        if (existing) {
+
+            existing.quantity += 1;
+
+        } else {
+
+            cart.push({
+                id: id,
+                name: title,
+                price: price,
+                imageUrl: imageUrl,
+                quantity: 1
+            });
+
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        alert("Товар додано у кошик");
     };
 
     return (
         <div className="product-card">
+
             <div className="product-img">
-                <img src={imageUrl || "/images/placeholder.png"} alt={title} />
+                <img
+                    src={imageUrl || "/images/placeholder.png"}
+                    alt={title}
+                />
             </div>
 
             <h3>{title}</h3>
+
             <p>{price} грн</p>
 
-            <button onClick={goToBuyPage} disabled={!token}>
-                {token ? "Купити" : "Увійдіть щоб купити"}
+            <button onClick={addToCart}>
+                Додати у кошик
             </button>
+
         </div>
     );
 }

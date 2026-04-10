@@ -38,6 +38,8 @@ export default function ProductCarousel({ products, token }: Props) {
                 {products.map((p) => (
                     <SwiperSlide key={p.id}>
                         <ProductCard
+                            key={p.id}
+                            id={p.id}
                             title={p.name}
                             price={p.price}
                             imageUrl={p.imageUrl}

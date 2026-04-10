@@ -1,91 +1,83 @@
-// Profile.tsx
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../styles/Profile.css";
 
-type Order = {
-    id: number;
-    productName: string;
-    quantity: number;
-    price: number;
-    date: string;
-};
-
 export default function Profile() {
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+
+    const [userName, setUserName] = useState("");
+
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+
+    const fetchUser = async () => {
+
+        const res = await fetch(
+            "https://localhost:44372/api/Auth/me",
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+        );
+
+        const data = await res.json();
+        setUserName(data.userName);
+    };
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+
         if (!token) {
             navigate("/login");
             return;
         }
 
-        fetch("https://localhost:44372/api/orders/myorders", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(async (res) => {
-                if (!res.ok) {
-                    if (res.status === 401) navigate("/login");
-                    const text = await res.text();
-                    throw new Error(text || "Не удалось загрузить заказы");
-                }
-                return res.json();
-            })
-            .then((data: Order[]) => setOrders(data))
-            .catch(err => setError(err.message))
-            .finally(() => setLoading(false));
-    }, [navigate]);
+        fetchUser();
+
+    }, []);
 
     const handleLogout = () => {
+
         localStorage.removeItem("token");
         navigate("/login");
-    };
 
-    if (loading) return <p className="loading">Загрузка...</p>;
-    if (error) return <p className="error">{error}</p>;
+    };
 
     return (
         <div className="profile-page">
-            <div className="profile-container">
-                <div className="profile-header">
-                    <h2>Ваш профиль</h2>
-                    <button onClick={handleLogout}>Выйти</button>
+
+            <div className="profile-layout">
+
+                <div className="profile-sidebar">
+
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                        width="80"
+                    />
+
+                    <h3>Вітаємо </h3>
+
+                    <p>{userName}</p>
+
+                    <button onClick={handleLogout}>
+                        Вийти
+                    </button>
+
                 </div>
 
-                {orders.length === 0 ? (
-                    <p className="no-orders">Вы ещё не сделали ни одного заказа.</p>
-                ) : (
-                    <div className="orders-list">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>№</th>
-                                <th>Товар</th>
-                                <th>Кол-во</th>
-                                <th>Цена</th>
-                                <th>Дата</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {orders.map((order, index) => (
-                                <tr key={order.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{order.productName}</td>
-                                    <td>{order.quantity}</td>
-                                    <td>{order.price} грн</td>
-                                    <td>{new Date(order.date).toLocaleDateString()}</td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                <div className="profile-content">
+
+                    <h2>Профіль</h2>
+
+                    <p>Ім'я користувача: {userName}</p>
+
+                    <Link to="/my-orders">
+                        <button className="submit">
+                            Мої замовлення
+                        </button>
+                    </Link>
+
+                </div>
+
             </div>
+
         </div>
     );
 }

@@ -124,3 +124,43 @@
 }
 
 
+@media (max-width: 768px) {
+    .product-card {
+        padding: 10px;
+    }
+
+    .product-card h3 {
+        font-size: 14px;
+    }
+
+    .product-card p {
+        font-size: 13px;
+    }
+
+    .product-card button {
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .ProductCarousel{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
+        max-width: fit-content;
+        overflow: hidden;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .swiper-button-prev,
+    .swiper-button-next {
+        display: none;
+    }
+}
+
+

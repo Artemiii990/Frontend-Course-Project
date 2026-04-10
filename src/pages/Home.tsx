@@ -3,13 +3,8 @@ import Sidebar from "../components/Sidebar"
 import ProductCarousel from "../components/ProductCarousel"
 import { getProducts } from "../Services/productsApi"
 import ProductsForYou from "../components/ProductsForYou"
+import type {Product} from "../Type/TypeProduct.ts";
 
-type Product = {
-    id: number
-    name: string
-    price: number
-    imageUrl: string
-}
 
 type Props = {
     token: string | null

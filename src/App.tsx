@@ -3,7 +3,6 @@ import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Admin from "./pages/ Admin"
 import Header from "./components/Header"
-import Shopping from "./pages/Cart.tsx"
 import Register from "./pages/Register"
 import Profile from "./pages/Profile"
 import Approved from "./pages/ApproveProduct.tsx"
@@ -11,7 +10,9 @@ import {useEffect, useState} from "react";
 import LeftSide from "./pages/backLeftSide.tsx"
 import SearchResult from "./pages/SearchResult"
 import Buy from "./pages/BuyProduct"
-
+import MyOrders from "./pages/My-orders.tsx"
+import Kosik from "./pages/Kosik.tsx"
+import CategoryPage from "./pages/CategoryPage.tsx";
 
 function App() {
     const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
@@ -36,9 +37,9 @@ function App() {
                 <Route path="/searchresult" element={<SearchResult />} />
                 <Route path="/approved" element={<Approved />}/>
                 <Route path="/buyproduct" element={<Buy />}/>
-                <Route path="/shopping" element={<Shopping initialProducts={[]} />}
-
-                />
+                <Route path="/my-orders" element={<MyOrders />} />
+                <Route path="/kosik" element={<Kosik />} />
+                <Route path="/category/:slug" element={<CategoryPage />} />
             </Routes>
 
         </BrowserRouter>
